@@ -119,7 +119,7 @@ merged_data <- merged_data %>%
 
 
 
-# Calculate livestock statistics from merged data
+# step 7- verifying data, after applying weights
 livestock_stats <- merged_data %>%
   summarise(
     # Percentage of households with milk cattle
@@ -133,7 +133,7 @@ livestock_stats <- merged_data %>%
     avg_cattle_per_100_hh = 100 * sum(milk_producing_cattle * weight, na.rm = TRUE) / total_weight
   )
 
-# Create comparison table
+# Create comparison table to campare our data with the official nsso report
 comparison_table <- data.frame(
   Metric = c("% Households with milk cattle", "Avg milk cattle per 100 HH"),
   Calculated_Value = c(livestock_stats$pct_households_with_cattle, 
@@ -141,7 +141,7 @@ comparison_table <- data.frame(
   NSS_Report_Value = c(16.4, 21.9)
 )
 
-# Print results
+
 print("Comparison with Statement 3.1 (All category, milk cattle only):")
 print(comparison_table)
 
@@ -172,16 +172,16 @@ comparison_table <- data.frame(
   NSS_Report_Value = c(16.4, 21.9)
 )
 
-# Print results
+
 print("\nComparison with Statement 3.1 (All category, milk cattle only):")
 print(comparison_table)
 
-# Print weighted statistics details
+
 print("\nWeighted statistics details:")
 print(livestock_stats) 
 
 
-# Calculate state-wise income comparison with proper handling of missing weights
+# Calculate state-wise income comparison
 state_income_stats <- merged_data %>%
   filter(!is.na(weight)) %>%
   group_by(State) %>%
@@ -194,7 +194,7 @@ state_income_stats <- merged_data %>%
   ) %>%
   ungroup()
 
-# Create reference data frame with report values
+#data from the report for comparison
 report_income_values <- data.frame(
   State = c(1:36),  # State codes
   Report_Income = c(
@@ -394,7 +394,7 @@ state_stats_named <- left_join(state_summary, state_map, by = c("State_Code" = "
   select(State_Name, everything()) %>%
   arrange(State_Code)
 
-# View result
+# results
 print(state_stats_named)
 
 
